@@ -1,0 +1,5 @@
+This is a test line with foo inside.
+Another Foo is here.
+No foobar should be untouched.
+foo, FOO, and FoO will all become bar.
+Don't confuse food with foo.
