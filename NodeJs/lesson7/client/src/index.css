@@ -1,0 +1,15 @@
+body.dark {
+  background-color: #121212;
+  color: #eee;
+}
+
+body.dark input,
+body.dark button {
+  background-color: #222;
+  color: #eee;
+  border: 1px solid #555;
+}
+
+body.dark a {
+  color: #bb86fc;
+}
