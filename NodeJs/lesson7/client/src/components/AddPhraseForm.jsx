@@ -11,40 +11,20 @@ export default function AddPhraseForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!en.trim() || !ua.trim()) {
-      alert('Будь ласка, заповніть обидва поля');
-      return;
-    }
-
-    try {
-      await dispatch(addPhrase({ en, ua })).unwrap();
-      navigate('/');
-    } catch (err) {
-      alert('Помилка при додаванні фрази');
-    }
+    if (!en || !ua) return;
+    await dispatch(addPhrase({ en, ua }));
+    setEn('');
+    setUa('');
+    navigate('/');
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', maxWidth: 400 }}>
-      <label>
-        Англійська фраза:
-        <input
-          type="text"
-          value={en}
-          onChange={e => setEn(e.target.value)}
-          style={{ width: '100%', marginBottom: 15, padding: 8, fontSize: '1rem' }}
-        />
-      </label>
-      <label>
-        Переклад:
-        <input
-          type="text"
-          value={ua}
-          onChange={e => setUa(e.target.value)}
-          style={{ width: '100%', marginBottom: 15, padding: 8, fontSize: '1rem' }}
-        />
-      </label>
-      <button type="submit" style={{ padding: '10px', fontSize: '1rem' }}>Додати фразу</button>
+    <form onSubmit={handleSubmit}>
+      <h2>➕ Додати фразу</h2>
+      <input value={en} onChange={(e) => setEn(e.target.value)} placeholder="🇬🇧 Англійська" />
+      <input value={ua} onChange={(e) => setUa(e.target.value)} placeholder="🇺🇦 Переклад" />
+      <button type="submit">Додати</button>
     </form>
   );
 }
+

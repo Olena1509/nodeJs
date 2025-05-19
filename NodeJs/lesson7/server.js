@@ -1,11 +1,29 @@
-const http = require('http');
-const PORT = 3001;
+// src/components/AddPhraseForm.jsx
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addPhrase } from '../features/phrases/phrasesSlice';
+import { useNavigate } from 'react-router-dom';
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' }); // <-- Оце важливо!
-  res.end('Сервер працює');
-});
+export default function AddPhraseForm() {
+  const [en, setEn] = useState('');
+  const [ua, setUa] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addPhrase({ en, ua }));
+    setEn('');
+    setUa('');
+    navigate('/');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h2>Додати нову фразу</h2>
+      <input value={en} onChange={(e) => setEn(e.target.value)} placeholder="Англійська фраза" />
+      <input value={ua} onChange={(e) => setUa(e.target.value)} placeholder="Переклад" />
+      <button type="submit">Додати</button>
+    </form>
+  );
+}

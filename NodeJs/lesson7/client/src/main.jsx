@@ -1,14 +1,20 @@
+// src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App'; // ✅ Це шукається в src/App.js
 import { Provider } from 'react-redux';
-import store from './store'; // ✅ Це шукається в src/store.js
+import { configureStore } from '@reduxjs/toolkit';
+import phrasesReducer from './features/phrases/phrasesSlice';
+import App from './App';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+const store = configureStore({
+  reducer: {
+    phrases: phrasesReducer,
+  },
+});
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
+

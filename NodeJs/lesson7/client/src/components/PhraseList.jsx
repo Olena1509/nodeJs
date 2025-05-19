@@ -1,70 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchPhrases, deletePhrase, toggleLearned } from '../features/phrases/phrasesSlice';
+import { fetchPhrases, deletePhrase } from '../features/phrases/phrasesSlice';
 
 export default function PhraseList() {
   const dispatch = useDispatch();
-  const { list: phrases, status, error } = useSelector(state => state.phrases);
-
+  const phrases = useSelector((state) => state.phrases);
+  const isArray = Array.isArray(phrases); // ✅ Сюди вставляємо
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      dispatch(fetchPhrases(search));
-    }, 300);
-
-    return () => clearTimeout(delayDebounce);
+    dispatch(fetchPhrases(search));
   }, [dispatch, search]);
 
-  const handleDelete = (id) => {
-    if (window.confirm('Видалити цю фразу?')) {
-      dispatch(deletePhrase(id));
-    }
-  };
-
-  const handleToggleLearned = (id) => {
-    dispatch(toggleLearned(id));
-  };
-
-  // Завантажити у JSON файл
   const downloadJSON = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(phrases, null, 2));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "phrases.json");
-    dlAnchor.click();
+    const blob = new Blob([JSON.stringify(phrases, null, 2)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'phrases.json';
+    link.click();
   };
 
   return (
     <div>
+      <h2>Список фраз</h2>
       <input
         type="text"
-        placeholder="Пошук фрази..."
+        placeholder="Пошук..."
         value={search}
-        onChange={e => setSearch(e.target.value)}
-        style={{ width: '100%', padding: '8px', marginBottom: '15px', fontSize: '1rem' }}
+        onChange={(e) => setSearch(e.target.value)}
       />
-      <button onClick={downloadJSON} style={{ marginBottom: '15px' }}>
-        Завантажити JSON
-      </button>
-      {status === 'loading' && <p>Завантаження...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      {phrases.length === 0 && status === 'succeeded' && <p>Фрази не знайдені</p>}
-
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {phrases.map(p => (
-          <li key={p.id} style={{ marginBottom: '12px', borderBottom: '1px solid #ccc', paddingBottom: '8px' }}>
-            <strong>{p.en}</strong> — {p.ua}{' '}
-            <button onClick={() => handleDelete(p.id)} style={{ marginLeft: 10 }}>Видалити</button>
-            <button onClick={() => handleToggleLearned(p.id)} style={{ marginLeft: 10 }}>
-              {p.learned ? 'Вивчено ✅' : 'Вивчити'}
-            </button>
-          </li>
-        ))}
+      <button onClick={downloadJSON}>⬇️ Завантажити JSON</button>
+      
+      <ul>
+        {isArray ? (
+          phrases.map((p) => (
+            <li key={p.id}>
+              <strong>{p.en}</strong> — {p.ua}
+              <button onClick={() => dispatch(deletePhrase(p.id))}>Видалити</button>
+            </li>
+          ))
+        ) : (
+          <li>❌ Помилка: дані не є масивом</li>
+        )}
       </ul>
     </div>
   );
 }
-
-

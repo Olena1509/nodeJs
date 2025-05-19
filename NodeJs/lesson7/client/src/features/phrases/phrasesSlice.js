@@ -3,82 +3,44 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchPhrases = createAsyncThunk(
-  'phrases/fetchPhrases',
-  async (search = '') => {
-    const res = await axios.get(`${API_URL}/phrases?search=${encodeURIComponent(search)}`);
-    return res.data;
-  }
-);
+export const fetchPhrases = createAsyncThunk('phrases/fetchPhrases', async (search = '') => {
+  const res = await axios.get(`${API_URL}/api/phrases?search=${search}`);
+  return res.data;
+});
 
-export const addPhrase = createAsyncThunk(
-  'phrases/addPhrase',
-  async (newPhrase) => {
-    const res = await axios.post(`${API_URL}/phrases`, newPhrase);
-    return res.data;
-  }
-);
+export const addPhrase = createAsyncThunk('phrases/addPhrase', async (phrase) => {
+  const res = await axios.post(`${API_URL}/api/phrases`, phrase);
+  return res.data;
+});
 
-export const deletePhrase = createAsyncThunk(
-  'phrases/deletePhrase',
-  async (id) => {
-    await axios.delete(`${API_URL}/phrases/${id}`);
-    return id;
-  }
-);
+export const deletePhrase = createAsyncThunk('phrases/deletePhrase', async (id) => {
+  await axios.delete(`${API_URL}/api/phrases/${id}`);
+  return id;
+});
 
-export const toggleLearned = createAsyncThunk(
-  'phrases/toggleLearned',
-  async (id) => {
-    const res = await axios.put(`${API_URL}/phrases/${id}`);
-    return res.data;
-  }
-);
+export const toggleLearned = createAsyncThunk('phrases/toggleLearned', async (id) => {
+  const res = await axios.put(`${API_URL}/api/phrases/${id}`);
+  return res.data;
+});
 
 const phrasesSlice = createSlice({
   name: 'phrases',
-  initialState: {
-    list: JSON.parse(localStorage.getItem('phrases')) || [],
-    status: 'idle',
-    error: null,
-  },
-  reducers: {
-    setList: (state, action) => {
-      state.list = action.payload;
-    },
-  },
+  initialState: [],
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPhrases.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchPhrases.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.list = action.payload;
-        localStorage.setItem('phrases', JSON.stringify(state.list)); // кешування
-      })
-      .addCase(fetchPhrases.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
+      .addCase(fetchPhrases.fulfilled, (_, action) => action.payload)
       .addCase(addPhrase.fulfilled, (state, action) => {
-        state.list.push(action.payload);
-        localStorage.setItem('phrases', JSON.stringify(state.list));
+        state.push(action.payload);
       })
-      .addCase(deletePhrase.fulfilled, (state, action) => {
-        state.list = state.list.filter(p => p.id !== action.payload);
-        localStorage.setItem('phrases', JSON.stringify(state.list));
-      })
+      .addCase(deletePhrase.fulfilled, (state, action) =>
+        state.filter(p => p.id !== action.payload)
+      )
       .addCase(toggleLearned.fulfilled, (state, action) => {
-        const index = state.list.findIndex(p => p.id === action.payload.id);
-        if (index !== -1) {
-          state.list[index] = action.payload;
-          localStorage.setItem('phrases', JSON.stringify(state.list));
-        }
+        const index = state.findIndex(p => p.id === action.payload.id);
+        if (index !== -1) state[index] = action.payload;
       });
   },
 });
 
-export const { setList } = phrasesSlice.actions;
 export default phrasesSlice.reducer;
-
