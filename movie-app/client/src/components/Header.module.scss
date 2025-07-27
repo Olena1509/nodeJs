@@ -1,0 +1,25 @@
+.header {
+  padding: 10px 20px;
+  background: #cfd3f5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: none;
+  color: #333;
+}
+
+.addLink {
+  text-decoration: none;
+  color: #101111;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+   color: #304ed7;
+  }
+}

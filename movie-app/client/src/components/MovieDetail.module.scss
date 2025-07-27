@@ -1,0 +1,105 @@
+.movieDetailContainer {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.loadingText {
+  padding: 20px;
+  font-size: 18px;
+  text-align: center;
+}
+
+.backButton {
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  background-color: #e5eaef;
+  color: #0c0c0c;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #a4a6a8;
+  }
+}
+
+.movieCard {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.moviePoster {
+  width: 300px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  flex-shrink: 0;
+}
+
+.movieInfo {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.movieTitle {
+  margin-bottom: 10px;
+  font-size: 26px;
+}
+
+.movieDescription {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.movieGenre {
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.movieRating {
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+  .movieCard {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .moviePoster {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .movieInfo {
+    min-width: auto;
+  }
+
+  .movieTitle {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .movieDescription,
+  .movieGenre,
+  .movieRating {
+    font-size: 16px;
+    text-align: center;
+  }
+}

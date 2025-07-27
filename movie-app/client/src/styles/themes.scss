@@ -1,0 +1,19 @@
+// src/styles/themes.scss
+
+:root {
+  // Світла тема
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --card-bg: white;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --primary-color: #2f0b85;
+}
+
+body.dark {
+  // Темна тема
+  --bg-color: black;
+  --text-color: #100f0f;
+  --card-bg: white;
+  --card-shadow: rgba(255, 255, 255, 0.08);
+  --primary-color: #9a8bef;
+}
